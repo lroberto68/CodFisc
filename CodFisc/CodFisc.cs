@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace CodFisc
 {
     
     public class CodFisc
     {
-        const string VOCALI = "aeiouAEIOU";
+        private const string VOCALI = "aeiouAEIOU";
 
         public string Cognome { get; set; }
         public string Nome { get; set; }
         public DateTime DataNascita { get; set; }
         public char Sesso { get; set; }
+        public string Luogo { get; set; }
 
-        public CodFisc(string cognome, string nome, DateTime dataNascita, char sesso)
+        public CodFisc(string cognome, string nome, DateTime dataNascita, char sesso, string luogo)
         {
             this.Cognome = cognome;
             this.Nome = nome;
             this.DataNascita = dataNascita;
             this.Sesso = sesso;
+            this.Luogo = luogo;
         }
 
         private void DividiConsVoc(ref string parteC, ref string parteV, string cogNom)
@@ -82,7 +85,7 @@ namespace CodFisc
 
         public string CreaParteData()
         {
-            string parteData=string.Empty;
+            string parteData;
             char[] codMese = new char[] { 'A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T' };
             byte indMese;
             byte indGiorno;
@@ -98,6 +101,24 @@ namespace CodFisc
             parteData = DataNascita.ToString("yy") + codMese[indMese - 1] + indGiorno.ToString().PadLeft(2,'0');
 
             return parteData;
+        }
+
+        public string CreaParteLuogo()
+        {
+            string [] lines=File.ReadAllLines(@"c:\prg\c#\CodFisc\listacomuni.txt");
+            //int i = 0;
+
+            foreach (string line in lines)
+            {
+                if (line.Contains(Luogo+";"))
+                {
+                    //Console.WriteLine("Il luogo {0} è stato trovato in posizione {1}", Luogo,i);
+                    string[] subs = line.Split(';');
+                    return subs[6];                 
+                }
+                //i++;
+            }
+            return $"Comune {Luogo} non trovato";
         }
     }
 }
