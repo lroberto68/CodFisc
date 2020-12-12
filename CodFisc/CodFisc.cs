@@ -11,11 +11,15 @@ namespace CodFisc
 
         public string Cognome { get; set; }
         public string Nome { get; set; }
+        public DateTime DataNascita { get; set; }
+        public char Sesso { get; set; }
 
-        public CodFisc(string cognome, string nome)
+        public CodFisc(string cognome, string nome, DateTime dataNascita, char sesso)
         {
             this.Cognome = cognome;
             this.Nome = nome;
+            this.DataNascita = dataNascita;
+            this.Sesso = sesso;
         }
 
         private void DividiConsVoc(ref string parteC, ref string parteV, string cogNom)
@@ -74,6 +78,26 @@ namespace CodFisc
             }
             
             return RestParte(parteConsonante, parteVocale);
+        }
+
+        public string CreaParteData()
+        {
+            string parteData=string.Empty;
+            char[] codMese = new char[] { 'A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T' };
+            byte indMese;
+            byte indGiorno;
+
+            indMese =byte.Parse(DataNascita.ToString("MM"));
+            indGiorno = byte.Parse(DataNascita.ToString("dd"));
+
+            if (this.Sesso == 'F')
+            {
+                indGiorno += 40;
+            }
+
+            parteData = DataNascita.ToString("yy") + codMese[indMese - 1] + indGiorno.ToString().PadLeft(2,'0');
+
+            return parteData;
         }
     }
 }
