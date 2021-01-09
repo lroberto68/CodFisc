@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Net.Http.Headers;
 
 namespace CodFisc
 {
@@ -129,6 +131,67 @@ namespace CodFisc
                 //i++;
             }
             return $"Comune {Luogo} non trovato";
+        }
+
+        public string CreaCin()
+        {
+            string cF = $"{this.CreaParteCogn()}{this.CreaParteNome()}{this.CreaParteData()}{this.CreaParteLuogo()}";
+            short pari=0;
+            short dispari=0;
+            int codCin;
+            string[] carDisp;
+            string[] carPar;
+            string[] resto;
+            
+            try
+            {
+                carDisp = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\CaratAlfaDispari.txt");
+                carPar = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\CaratAlfaPari.txt");
+                resto = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\Resto.txt");
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Errore: " + e.Message);
+                return "Errore";
+            }
+
+            for(byte p=0;p<cF.Length;p++)
+            {
+                if ((p+1)%2==1)
+                {
+                    foreach(string d in carDisp)
+                    {
+                        if (d.Contains(cF[p] + ";"))
+                        {
+                            dispari += Convert.ToInt16(d.Substring(d.IndexOf(";")+1));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (string d in carPar)
+                    {
+                        if (d.Contains(cF[p] + ";"))
+                        {
+                            pari += Convert.ToInt16(d.Substring(d.IndexOf(";" )+1));
+                        }
+                    }
+                }
+            }
+           
+            codCin = (pari + dispari)%26;
+            byte i = 0;
+
+            string [] r=new string[26];
+
+            foreach(string d in resto)
+            {
+                r[i]= d.Substring(d.IndexOf(";")+1);
+                i++;
+            }
+
+            return r[codCin];
         }
     }
 }

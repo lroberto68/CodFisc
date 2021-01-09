@@ -11,8 +11,9 @@ namespace CodFisc
             Console.WriteLine("Parte Cognome {0}", c.CreaParteCogn());
             Console.WriteLine("Parte Nome {0}", c.CreaParteNome());
             Console.WriteLine("Parte data {0}",c.CreaParteData());
-            //Console.WriteLine(c.CreaParteLuogo());
-            Console.WriteLine($"Codice fiscale: {c.CreaParteCogn()}{c.CreaParteNome()}{c.CreaParteData()}{c.CreaParteLuogo()}");
+            Console.WriteLine("Parte Luogo {0}",c.CreaParteLuogo());
+            Console.WriteLine("Parte CIN {0}",c.CreaCin());
+            Console.WriteLine($"Codice fiscale: {c.CreaParteCogn()}{c.CreaParteNome()}{c.CreaParteData()}{c.CreaParteLuogo()}{c.CreaCin()}");
             Console.WriteLine("Hello World!");
         }
     }
