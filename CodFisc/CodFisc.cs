@@ -105,8 +105,18 @@ namespace CodFisc
 
         public string CreaParteLuogo()
         {
-            string [] lines=File.ReadAllLines(@"c:\prg\c#\CodFisc\listacomuni.txt");
-            //int i = 0;
+            string [] lines;
+            
+            try
+            {
+                lines = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\listacomuni.txt");
+            }
+
+            catch
+            {
+                Console.WriteLine("Errore");
+                return "Errore";
+            }
 
             foreach (string line in lines)
             {
