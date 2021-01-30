@@ -6,7 +6,7 @@ namespace CodFisc
     {
         static void Main(string[] args)
         {
-            CodFisc c = new CodFisc("Luongo", "Roberto", new DateTime(1968,06,01),'M', "Pozzuoli");
+            CodFisc c = new CodFisc("Cicale", "Assunta", new DateTime(1939,03,07),'F', "Pozzuoli");
            
             Console.WriteLine("Parte Cognome {0}", c.CreaParteCogn());
             Console.WriteLine("Parte Nome {0}", c.CreaParteNome());

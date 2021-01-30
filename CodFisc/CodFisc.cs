@@ -111,7 +111,7 @@ namespace CodFisc
             
             try
             {
-                lines = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\listacomuni.txt");
+                lines = File.ReadAllLines(@"C:\prg\c#\CodFisc\listacomuni.txt");
             }
 
             catch
@@ -124,20 +124,35 @@ namespace CodFisc
             {
                 if (line.Contains(Luogo+";"))
                 {
-                    //Console.WriteLine("Il luogo {0} è stato trovato in posizione {1}", Luogo,i);
                     string[] subs = line.Split(';');
                     return subs[6];                 
                 }
-                //i++;
             }
             return $"Comune {Luogo} non trovato";
+        }
+
+        private short ParDispPar(string[] car,int p)
+        {
+            string cF = $"{this.CreaParteCogn()}{this.CreaParteNome()}{this.CreaParteData()}{this.CreaParteLuogo()}";
+            short parametro = 0;    
+
+            for(int i=p;i<cF.Length;i+=2)
+            {
+                foreach (string d in car)
+                {
+                    if (d.Contains(cF[i] + ";"))
+                    {
+                        parametro += Convert.ToInt16(d.Substring(d.IndexOf(";") + 1));
+                    }
+                }
+            }
+            return parametro;
         }
 
         public string CreaCin()
         {
             string cF = $"{this.CreaParteCogn()}{this.CreaParteNome()}{this.CreaParteData()}{this.CreaParteLuogo()}";
-            short pari=0;
-            short dispari=0;
+            
             int codCin;
             string[] carDisp;
             string[] carPar;
@@ -145,9 +160,9 @@ namespace CodFisc
             
             try
             {
-                carDisp = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\CaratAlfaDispari.txt");
-                carPar = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\CaratAlfaPari.txt");
-                resto = File.ReadAllLines(@"C:\mypc\prg\c#\CodFisc\Resto.txt");
+                carDisp = File.ReadAllLines(@"C:\prg\c#\CodFisc\CaratAlfaDispari.txt");
+                carPar = File.ReadAllLines(@"C:\prg\c#\CodFisc\CaratAlfaPari.txt");
+                resto = File.ReadAllLines(@"C:\prg\c#\CodFisc\Resto.txt");
             }
 
             catch (Exception e)
@@ -155,32 +170,8 @@ namespace CodFisc
                 Console.WriteLine("Errore: " + e.Message);
                 return "Errore";
             }
-
-            for(byte p=0;p<cF.Length;p++)
-            {
-                if ((p+1)%2==1)
-                {
-                    foreach(string d in carDisp)
-                    {
-                        if (d.Contains(cF[p] + ";"))
-                        {
-                            dispari += Convert.ToInt16(d.Substring(d.IndexOf(";")+1));
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (string d in carPar)
-                    {
-                        if (d.Contains(cF[p] + ";"))
-                        {
-                            pari += Convert.ToInt16(d.Substring(d.IndexOf(";" )+1));
-                        }
-                    }
-                }
-            }
-           
-            codCin = (pari + dispari)%26;
+            
+            codCin = (ParDispPar(carPar,1) + ParDispPar(carDisp,0))%26;
             byte i = 0;
 
             string [] r=new string[26];
