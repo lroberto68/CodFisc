@@ -151,8 +151,6 @@ namespace CodFisc
 
         public string CreaCin()
         {
-            string cF = $"{this.CreaParteCogn()}{this.CreaParteNome()}{this.CreaParteData()}{this.CreaParteLuogo()}";
-            
             int codCin;
             string[] carDisp;
             string[] carPar;
